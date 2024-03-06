@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- vue.js CDN 적용 -->
+<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+
+<title>직원 관리</title>
+</head>
+<body>
+
+	<div id="app">
+		<h1>직원 관리</h1>
+		{{ message }}
+
+		<table>
+			<thead>
+				</thead>
+		</table>
+
+	</div>
+
+	<script>
+		var app = new Vue({
+			  el : '#app'
+			, data : {
+				message : 'Hello, Vue! vue로 테이블 그리기 예제 따라하기'
+			} 
+		});
+	</script>
+
+</body>
+</html>

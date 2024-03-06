@@ -1,0 +1,21 @@
+# server port
+server:
+  port: 8080
+
+# database
+spring:
+  datasource:
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+    url: jdbc:oracle:thin:@192.168.0.101:1521/xe
+    username: eco_fresh
+    password: eco1505!
+      
+# mybatis
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  config-location: classpath:mybatis-config.xml
+
+# logging
+logging:
+  level:
+    root: debug
