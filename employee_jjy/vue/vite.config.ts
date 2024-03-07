@@ -11,6 +11,14 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
-    }
-  }
+    },
+  },
+  build: {
+    outDir: "../src/main/resources/static",
+  },
+  server: {
+    proxy: {
+      "/api":"http://localhost:8080",
+    },
+  },
 })
