@@ -2,7 +2,54 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.eco.employee.repository">
+<mapper namespace="com.eco.employee.mapper.EmployeeMapper">
 <!-- SQL 문장과 매핑 정보 -->
+
+	<select id = "getList" resultType = "EmployeeDTO">
+		SELECT	EMPLOYEE_NO      -- 직원 번호 --
+				, EMPLOYEE_NM	 -- 직원 이름 --
+				, HP_NO			 -- 휴대폰 번호 --
+				, EMAIL			 -- 이메일 --
+				, ENTR_DT		 -- 입사 일자--
+				, RETR_DT		 -- 퇴사 일자 --
+				, WRK_TYP_CD	 -- 근무형태코드 --
+				, DEL_YN		 -- 삭제 여부 --
+				, REG_ID		 -- 등록자 --
+				, REG_DTM		 -- 등록 일시 --
+				, MOD_ID		 -- 수정자 --
+				, MOD_DTM		 -- 수정 일시 --
+				, BASE_ADR		 -- 기본 주소 --
+				, DTL_ADR		 -- 상세 주소 --
+				, ZIP_NO		 -- 우편 번호 --
+				, BIRTH_DT		 -- 생년월일 --
+				, PSTN_NM 		 -- 직책 이름 --
+				, RANK_NM		 -- 직급 이름 --
+		FROM	EMPLOYEE_JJY_MST
+		-- WHERE	DEL_YN = 'n' --
+	</select>
+	
+	<insert id = "saveEmployee" parameterType="EmployeeDTO">
+		INSERT INTO EMPLOYEE_JJY_MST
+					( EMPLOYEE_NO
+					, EMPLOYEE_NM
+					, ENTR_DT
+					, RANK_NM
+					, DEL_YN
+					, REG_ID
+					, REG_DTM
+					, MOD_ID
+					, MOD_DTM
+					)
+			 VALUES ( #{employee_no}
+			 		, #{employee_nm}
+			 		, #{entr_dt}
+			 		, #{rank_nm}
+			 		, #{del_yn}
+			 		, #{reg_id}
+			 		, #{reg_dtm}
+			 		, #{mod_id}
+			 		, #{mod_dtm}
+			 		)
+	</insert>
 
 </mapper>

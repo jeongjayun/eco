@@ -7,13 +7,11 @@
 
 	<settings>
 		<setting name="jdbcTypeForNull" value="NULL" />
-		<setting name="mapUnderscoreToCamelCase" value="true" />
 		<setting name="logImpl" value="SLF4J" />
 	</settings>
 
 	<typeAliases>
-		
+		<package name="com.eco.employee.dto" />
 	</typeAliases>
-	
-	
+
 </configuration>

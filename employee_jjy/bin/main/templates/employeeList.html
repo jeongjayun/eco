@@ -1,6 +1,6 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
-<!-- 타임리프 적용한 건 대충 감안하기 -->
+
 <head>
 <!-- Required meta tags -->
 <meta charset="utf-8">
@@ -10,33 +10,42 @@
 <!-- Include necessary CSS files -->
 <link rel="stylesheet" type="text/css" th:href="@{css/jquery-ui.css}">
 <link rel="stylesheet" type="text/css" th:href="@{css/ui.jqgrid.css}">
-<link rel="stylesheet" type="text/css"
-	th:href="@{css/ui.multiselect.css}">
+<link rel="stylesheet" type="text/css"  
+    th:href="@{css/ui.multiselect.css}">
 
-<!-- Include jQuery library -->
+<!-- Bootstrap CSS -->  
+<link rel="stylesheet" type="text/css" th:href="@{css/bootstrap.css}"> 
+
+<!-- Include jQuery library -->  
 <script type="text/javascript" th:src="@{js/jquery-3.2.1.js}"></script>
+
+<!-- Include jqGrid plugin -->  
+<script type="text/javascript"  
+    th:src="@{js/jqgrid/jquery.jqGrid.min.js}"></script>  
 
 <!-- Include jqGrid language file (if needed) -->
 <script type="text/javascript" th:src="@{js/jqgrid/grid.locale-kr.js}"></script>
+
+<!-- jqGrid script -->
+<script type="text/javascript" th:src="@{js/employee/employeeList0001.js}"></script>
 
 <title>사원 정보</title>
 </head>
 
 <body>
-	<table id="EmployeeList">
-	</table>
+	<div class="container-lg my-3">
+		<h1>직원목록</h1>
+								
+		<div id="buttonWrap">
+			<button type="button" id="btnAddRow">신규</button>
+			<button type="button" id="btnDeleteRow">삭제</button>
+			<button type="button" id="btnSaveRow">저장</button>
+		</div>
+
+		<table id="employeeList">
+		</table>
+
+		<div id="employeePager"></div>
+	</div>
 </body>
-
-<script type="text/javascript">
-	$(document).ready(
-			function() {
-				$("#EmployeeList").jqGrid(
-						{
-							datatype : 'json',
-							loadonce : true,
-							postData : {},
-							colNames : [  ],
-
-						});
-			});
-</script>
+</html>

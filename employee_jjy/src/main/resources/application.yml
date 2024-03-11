@@ -16,6 +16,10 @@ mybatis:
   config-location: classpath:mybatis-config.xml
 
 # logging
-#logging:
-#  level:
-#    root: debug
+logging:
+  level:
+    com:
+      eco:
+        employee:
+          mapper :
+            mybatis : trace
