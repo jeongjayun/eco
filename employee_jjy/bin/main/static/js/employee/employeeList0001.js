@@ -1,6 +1,5 @@
 $(document).ready(function () {
   //신규 : 새로운 Row 생성
-  //TODO : 테스트로 직원번호, 이름까지만 data 생성, 결과 확인 후 나머지 값 추가하기
   $("#btnAddRow").click(function () {
     let rowId = $("#employeeList").getGridParam("reccount");
     console.log("rowId : " + rowId);
@@ -8,11 +7,25 @@ $(document).ready(function () {
     let data = {
       employee_no: "",
       employee_nm: "",
+      hp_no: "",
+      email: "",
+      entr_dt: "",
+      retr_dt: "",
+      wrk_typ_cd: "",
+      base_adr: "",
+      dtl_adr: "",
+      zip_np: "",
+      birth_dt: "",
+      pstn_nm: "",
+      rank_nm: "",
+      del_yn: "",
+      reg_id: "",
+      reg_dtm: "",
+      mod_id: "",
+      mod_dtm: "",
     };
 
-    console.log("data : " + data);
-
-    $("#employeeList").jqGrid("addRowData", rowId, data, "first");
+    $("#employeeList").jqGrid("addRowData", rowId + 1, data, "last");
   });
 
   //삭제
@@ -20,8 +33,31 @@ $(document).ready(function () {
   //TODO : 그리드에서 행만 삭제되지 db까지 연결된 것 아님
   $("#btnDeleteRow").click(function () {
     let selectedRowId = $("#employeeList").getGridParam("selrow");
+    let getColumnValue = $("#employeeList").getCell(
+      selectedRowId,
+      "employee_no"
+    );
+
     if (selectedRowId) {
       console.log("selectedRowId : " + selectedRowId);
+      console.log("selectedGridParam : " + selectedGridParam);
+
+      $.ajax({
+        type: "POST",
+        url: "/deleteEmployee",
+        data: selectedRowId,
+        contentType: "application/json",
+        success: function (data) {
+          alert("성공 : " + data);
+          console.log(data);
+        },
+        error: function (xhr, status, error) {
+          alert("실패 : " + xhr, status, error);
+          console.log("실패 param : " + params);
+          console.log(xhr, status, error);
+        },
+      });
+
       $("#employeeList").delRowData(selectedRowId);
     } else {
       alert("삭제할 열을 선택해주세요.");
@@ -42,12 +78,13 @@ $(document).ready(function () {
       datatype: "text",
       contentType: "application/json",
       success: function (data) {
-        alert("성공 : " + data);
-        console.log("성공 param: " + param);
+        console.log("성공 param: " + params);
+        $("#employeeList").trigger("reloadGrid");
+        alert("성공한 데이터 : " + data + "개. \n새로고침 완료!");
       },
       error: function (xhr, status, error) {
         alert("실패 : " + xhr, status, error);
-        console.log("실패 param : " + param);
+        console.log("실패 param : " + params);
         console.log(xhr, status, error);
       },
     });
@@ -56,9 +93,9 @@ $(document).ready(function () {
   //jqGrid
   $("#employeeList").jqGrid({
     datatype: "json",
-    url: "/getList",
+    url: "/getListNotAdmin",
     mtype: "POST",
-    loadonce: true,
+    loadonce: false,
     postData: {},
     caption: "직원 목록",
     colNames: [
@@ -81,7 +118,6 @@ $(document).ready(function () {
         name: "employee_no",
         index: "employee_no",
         align: "center",
-        editable: true,
       },
       {
         name: "employee_nm",
@@ -93,11 +129,13 @@ $(document).ready(function () {
         name: "hp_no",
         index: "hp_no",
         align: "center",
+        editable: true,
       },
       {
         name: "email",
         index: "email",
         align: "center",
+        editable: true,
       },
       {
         name: "entr_dt",
@@ -114,12 +152,13 @@ $(document).ready(function () {
         name: "wrk_typ_cd",
         index: "wrk_typ_cd",
         align: "center",
-        edittype: "select",
+        editable: true,
       },
       {
         name: "pstn_nm",
         index: "pstn_nm",
         align: "center",
+        editable: true,
       },
       {
         name: "rank_nm",
@@ -137,7 +176,6 @@ $(document).ready(function () {
         name: "reg_dtm",
         index: "reg_dtm",
         align: "center",
-        editable: true,
       },
       {
         name: "mod_id",
@@ -149,13 +187,12 @@ $(document).ready(function () {
         name: "mod_dtm",
         index: "mod_dtm",
         align: "center",
-        editable: true,
       },
     ],
     rownumbers: true,
     rowNum: 10,
     rowList: [10, 20, 30],
-    multiselect: false,
+    multiselect: true,
 
     pager: "#employeePager",
     pgbuttons: true,
