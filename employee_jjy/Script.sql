@@ -182,8 +182,26 @@ INSERT  INTO EMPLOYEE_JJY_MST
 		 		, '20240202'
 		 		);
 
---직원 자동 채번번호 포함하여 넣는 쿼리 확인--
-INSERT  INTO EMPLOYEE_JJY_MST
+-- 자동채번 위한 직원번호 뒷자리 4숫자 sequence 추가 --
+CREATE SEQUENCE employee_no_seq
+INCREMENT BY 1
+START WITH 1;
+
+ALTER SEQUENCE employee_no_seq
+MAXVALUE 9999
+CYCLE; -- 최대 4숫자지정 후 넘은 경우에 순환하도록 설정 --
+
+SELECT employee_no_seq.CURRVAL FROM DUAL;
+
+-- 1. 4숫자로 만들기 위한 함수 적용 --
+SELECT LPAD(employee_no_seq.CURRVAL,4,0) FROM DUAL; 
+
+-- 2. 자동채번 위한 직원번호 앞에서 4숫자 년도 숫자 가져오기 --
+SELECT sysdate FROM dual;
+SELECT TO_CHAR(sysdate, 'yyyy') FROM dual; 
+
+-- 위의 두 함수 합치기 --
+INSERT INTO EMPLOYEE_JJY_MST
 				( EMPLOYEE_NO
 				, EMPLOYEE_NM
 				, ENTR_DT
@@ -194,17 +212,75 @@ INSERT  INTO EMPLOYEE_JJY_MST
 				, MOD_ID
 				, MOD_DTM
 				)
-		VALUES ( (SELECT
-				  FROM EMPLOYEE_JJY_MST
-				  WHERE EMPLOYEE_NO LIKE 'E2024%';
-				 )
-		 		, 'test2'
-		 		, '20240201'
-		 		, '주임'
-		 		, 'n'
-		 		, 'E20249999'
-		 		, '20240202'
-		 		, 'E20249999'
-		 		, '20240202'
-		 		);
+	 VALUES 	( 'E'
+	 				||(SELECT TO_CHAR(sysdate, 'yyyy') FROM DUAL)
+	 				||LPAD(employee_no_seq.NEXTVAL, 4, 0)
+			 	, 'test6'
+			 	, '20240201'
+			 	, '대리'
+			 	, 'y'
+			 	, 'E20249999'
+			 	, '20240202'
+			 	, 'E20249999'
+			 	, '20240202'
+			 	);
+			 
+-- insert 시 reg_dtm 을 system 에서 저장하게 -- 
+INSERT INTO EMPLOYEE_JJY_MST
+				( EMPLOYEE_NO
+				, EMPLOYEE_NM
+				, ENTR_DT
+				, RANK_NM
+				, DEL_YN
+				, REG_ID
+				, REG_DTM
+				, MOD_ID
+				, MOD_DTM
+				)
+	 VALUES 	( 'E'
+	 				||(SELECT TO_CHAR(sysdate, 'yyyy') FROM DUAL)
+	 				||LPAD(employee_no_seq.NEXTVAL, 4, 0)
+			 	, 'test6'
+			 	, '20240201'
+			 	, '대리'
+			 	, 'y'
+			 	, 'E20249999'
+			 	, SYSDATE		--00/00/00 로 저장됨--
+			 	, 'E20249999'
+			 	, '20240202'
+			 	);
+			 	
+INSERT INTO EMPLOYEE_JJY_MST
+				( EMPLOYEE_NO
+				, EMPLOYEE_NM
+				, ENTR_DT
+				, RANK_NM
+				, DEL_YN
+				, REG_ID
+				, REG_DTM
+				, MOD_ID
+				, MOD_DTM
+				)
+	 VALUES 	( 'E'
+	 				||(SELECT TO_CHAR(sysdate, 'yyyy') FROM DUAL)
+	 				||LPAD(employee_no_seq.NEXTVAL, 4, 0)
+			 	, 'test6'
+			 	, '20240201'
+			 	, '대리'
+			 	, 'y'
+			 	, 'E20249999'
+			 	, TO_CHAR(SYSDATE,'yyyy-mm-dd hh:mi:ss') 
+			 	, 'E20249999'
+			 	, TO_CHAR(SYSDATE,'yyyy-mm-dd hh:mi:ss')
+			 	);
+			 	
+-- dtm data 크기가 작아서 컬럼 변경
+ALTER TABLE ECO_FRESH.EMPLOYEE_JJY_MST MODIFY reg_dtm varchar2(20);
+ALTER TABLE eco_fresh.EMPLOYEE_JJY_MST MODIFY mod_dtm varchar2(20);
 
+SELECT * FROM EMPLOYEE_JJY_MST ORDER BY REG_DTM DESC ;
+
+-- 삭제 시 DEL_YN을 Y로 바꾸는 쿼리
+UPDATE ECO_FRESH.EMPLOYEE_JJY_MST
+SET DEL_YN ='Y'
+WHERE EMPLOYEE_NO = 'E20240039';

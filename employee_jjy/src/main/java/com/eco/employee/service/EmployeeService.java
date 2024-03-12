@@ -15,14 +15,14 @@ public class EmployeeService {
 
 	private final EmployeeMapper employeeMapper;
 
-	public List<EmployeeDTO> getList() {
-		return employeeMapper.getList();
+	public List<EmployeeDTO> getListNotAdmin() {
+		return employeeMapper.getListNotAdmin();
 	}
 
-	public void saveEmployee(List<EmployeeDTO> employeeDTO) {
+	public int saveEmployee(List<EmployeeDTO> employeeDTOList) {
 		System.out.println("EmployeeSerivce 에서 saveEmployee 실행");
-		System.out.println("employeeDTO : " + employeeDTO);
-		employeeMapper.saveEmployee(employeeDTO);
+		System.out.println("employeeDTO : " + employeeDTOList);
+		return employeeMapper.saveEmployee(employeeDTOList);
 	}
 
 }

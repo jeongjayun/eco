@@ -9,8 +9,8 @@ import com.eco.employee.dto.EmployeeDTO;
 @Mapper
 public interface EmployeeMapper {
 	
-	List<EmployeeDTO> getList();
+	List<EmployeeDTO> getListNotAdmin();
 	
-	void saveEmployee(List<EmployeeDTO> employeeDTO);
+	int saveEmployee(List<EmployeeDTO> employeeDTOList);
 
 }

@@ -5,7 +5,7 @@ server:
 # database
 spring:
   datasource:
-    driver-class-name: oracle.jdbc.driver.OracleDriver
+    driver-class-name: oracle.jdbc.OracleDriver
     url: jdbc:oracle:thin:@192.168.0.101:1521/xe
     username: eco_fresh
     password: eco1505!
