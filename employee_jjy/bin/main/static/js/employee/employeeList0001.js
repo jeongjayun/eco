@@ -28,37 +28,35 @@ $(document).ready(function () {
     $("#employeeList").jqGrid("addRowData", rowId + 1, data, "last");
   });
 
+  //TODO : 삭제버튼 누를 때 confirm 받을 수 있도록 개선.
+
   //삭제
-  //TODO : 데이터가 삭제되는 것이 아니라 del_yn 에서 값 변경되도록 해야함.
-  //TODO : 그리드에서 행만 삭제되지 db까지 연결된 것 아님
   $("#btnDeleteRow").click(function () {
     let selectedRowId = $("#employeeList").getGridParam("selrow");
-    let getColumnValue = $("#employeeList").getCell(
-      selectedRowId,
-      "employee_no"
-    );
+    let employee_no = $("#employeeList").getCell(selectedRowId, "employee_no");
 
     if (selectedRowId) {
       console.log("selectedRowId : " + selectedRowId);
-      console.log("selectedGridParam : " + selectedGridParam);
+      console.log("selectedRowId의 employee_no : " + employee_no);
 
       $.ajax({
         type: "POST",
-        url: "/deleteEmployee",
-        data: selectedRowId,
-        contentType: "application/json",
+        url: "/deleteEmployee/" + employee_no,
+        data: employee_no,
+        datatype: "text",
         success: function (data) {
-          alert("성공 : " + data);
+          alert(
+            employee_no + "번의 사원을 삭제하였습니다.\n삭제한 데이터 : " + data
+          );
           console.log(data);
+          $("#employeeList").delRowData(selectedRowId);
         },
         error: function (xhr, status, error) {
           alert("실패 : " + xhr, status, error);
-          console.log("실패 param : " + params);
+          console.log("실패 : " + employee_no);
           console.log(xhr, status, error);
         },
       });
-
-      $("#employeeList").delRowData(selectedRowId);
     } else {
       alert("삭제할 열을 선택해주세요.");
     }
@@ -142,17 +140,43 @@ $(document).ready(function () {
         index: "entr_dt",
         align: "center",
         editable: true,
+        editoptions: {
+          dataInit: function (e) {
+            $(e).datepicker({
+              dateFormat: "yy-mm-dd",
+              changeYear: true,
+              changeMonth: true,
+            });
+            $(e).datepicker("setDate", "today");
+          },
+        },
       },
       {
         name: "retr_dt",
         index: "retr_dt",
         align: "center",
+        editable: true,
+        editoptions: {
+          dataInit: function (e) {
+            $(e).datepicker({
+              dateFormat: "yy-mm-dd",
+              changeYear: true,
+              changeMonth: true,
+            });
+            $(e).datepicker("setDate", "today");
+          },
+        },
       },
       {
         name: "wrk_typ_cd",
         index: "wrk_typ_cd",
         align: "center",
         editable: true,
+        edittype: "select",
+        formatter: "select",
+        editoptions: {
+          value: { "00": "선택", "01": "출근", "02": "외근", "03": "파견" },
+        },
       },
       {
         name: "pstn_nm",
@@ -165,6 +189,17 @@ $(document).ready(function () {
         index: "rank_nm",
         align: "center",
         editable: true,
+        edittype: "select",
+        formatter: "select",
+        editoptions: {
+          value: {
+            전체: "선택",
+            인턴: "인턴",
+            사원: "사원",
+            주임: "주임",
+            대리: "대리",
+          },
+        },
       },
       {
         name: "reg_id",
@@ -192,7 +227,7 @@ $(document).ready(function () {
     rownumbers: true,
     rowNum: 10,
     rowList: [10, 20, 30],
-    multiselect: true,
+    multiselect: false,
 
     pager: "#employeePager",
     pgbuttons: true,
@@ -201,9 +236,9 @@ $(document).ready(function () {
     viewrecords: true,
 
     autowidth: true,
+    autoheight: true,
     shrinkToFit: true,
     scroll: false,
-    autoheight: true,
 
     cellEdit: true,
     cellsubmit: "clientArray",

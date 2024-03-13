@@ -18,6 +18,7 @@
 
 <!-- Include jQuery library -->  
 <script type="text/javascript" th:src="@{js/jquery-3.2.1.js}"></script>
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
 
 <!-- Include jqGrid plugin -->  
 <script type="text/javascript"  
@@ -26,7 +27,7 @@
 <!-- Include jqGrid language file (if needed) -->
 <script type="text/javascript" th:src="@{js/jqgrid/grid.locale-kr.js}"></script>
 
-<!-- jqGrid script -->
+<!-- jqGrid & action script -->
 <script type="text/javascript" th:src="@{js/employee/employeeList0001.js}"></script>
 
 <title>사원 정보</title>
@@ -37,11 +38,12 @@
 		<h1>직원목록</h1>
 								
 		<div id="buttonWrap">
+			<button type="button" id="btnSearch">조회</button>
 			<button type="button" id="btnAddRow">신규</button>
 			<button type="button" id="btnDeleteRow">삭제</button>
 			<button type="button" id="btnSaveRow">저장</button>
 		</div>
-
+		<br>
 		<table id="employeeList">
 		</table>
 
