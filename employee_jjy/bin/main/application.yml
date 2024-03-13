@@ -22,4 +22,4 @@ logging:
       eco:
         employee:
           mapper :
-            mybatis : trace
+            mybatis : debug

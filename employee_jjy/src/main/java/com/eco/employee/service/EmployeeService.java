@@ -20,9 +20,17 @@ public class EmployeeService {
 	}
 
 	public int saveEmployee(List<EmployeeDTO> employeeDTOList) {
-		System.out.println("EmployeeSerivce 에서 saveEmployee 실행");
-		System.out.println("employeeDTO : " + employeeDTOList);
 		return employeeMapper.saveEmployee(employeeDTOList);
+	}
+	
+	public int deleteEmployee(EmployeeDTO employeeDTO) {
+		System.out.println("EmployeeService에서 deleteEmployee 실행");
+		return employeeMapper.deleteEmployee(employeeDTO);
+	}
+	
+	public EmployeeDTO searchEmployeeByEmployeeNo(String employee_no) {
+		System.out.println("EmployeeService 에서 employee_no로 사원찾기");
+		return employeeMapper.searchEmployeeByEmployeeNo(employee_no);
 	}
 
 }

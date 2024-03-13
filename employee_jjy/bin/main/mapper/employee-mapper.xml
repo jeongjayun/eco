@@ -60,6 +60,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 					, HP_NO
 					, EMAIL
 					, ENTR_DT
+					, RETR_DT
 					, WRK_TYP_CD
 					, BASE_ADR
 					, DTL_ADR
@@ -82,7 +83,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			 		, #{item.employee_nm}
 			 		, #{item.hp_no}
 			 		, #{item.email}
-			 		, #{item.entr_dt}
+			 		, TO_CHAR(TO_DATE(#{item.entr_dt}, 'yyyymmdd'), 'yyyymmdd')
+			 		, TO_CHAR(TO_DATE(#{item.retr_dt}, 'yyyymmdd'), 'yyyymmdd')
 			 		, #{item.wrk_typ_cd}
 			 		, #{item.base_adr}
 			 		, #{item.dtl_adr}
@@ -92,17 +94,42 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			 		, NVL(#{item.rank_nm}, '주임')
 			 		, DEFAULT
 			 		, #{item.reg_id}
-			 		, TO_CHAR(sysdate, 'yyyy-mm-dd hh24:mi:ss')
+			 		, TO_CHAR(sysdate, 'yyyymmddhh24miss')
 			 		, #{item.mod_id}
-			 		, TO_CHAR(sysdate, 'yyyy-mm-dd hh24:mi:ss')
+			 		, TO_CHAR(sysdate, 'yyyymmddhh24miss')
 			 	)
 			</foreach>
 	</insert>
 	
-	<!-- 삭제 시 Del_yn 을 Y 로 바꾸기 -->
-	<update id="deleteEmployee" parameterType="List">
-		UPDATE EMPLOYEE_JJY_MST SET DEL_YN = 'Y'
+	<!-- 삭제 시 Del_yn 을 Y 로 바꾸기, 수정일시 변경 -->
+	<update id="deleteEmployee" parameterType="EmployeeDTO">
+		UPDATE EMPLOYEE_JJY_MST
+								SET DEL_YN = 'Y'
+									, MOD_DTM = TO_CHAR(sysdate, 'yyyy-mm-dd hh24:mi:ss')
 								WHERE EMPLOYEE_NO = #{employee_no}
 	</update>
+	
+	<select id = "searchEmployeeByEmployeeNo" resultType="EmployeeDTO">
+		SELECT	EMPLOYEE_NO      -- 직원 번호 --
+				, EMPLOYEE_NM	 -- 직원 이름 --
+				, HP_NO			 -- 휴대폰 번호 --
+				, EMAIL			 -- 이메일 --
+				, ENTR_DT		 -- 입사 일자--
+				, RETR_DT		 -- 퇴사 일자 --
+				, WRK_TYP_CD	 -- 근무형태코드 --
+				, DEL_YN		 -- 삭제 여부 --
+				, REG_ID		 -- 등록자 --
+				, REG_DTM		 -- 등록 일시 --
+				, MOD_ID		 -- 수정자 --
+				, MOD_DTM		 -- 수정 일시 --
+				, BASE_ADR		 -- 기본 주소 --
+				, DTL_ADR		 -- 상세 주소 --
+				, ZIP_NO		 -- 우편 번호 --
+				, BIRTH_DT		 -- 생년월일 --
+				, PSTN_NM 		 -- 직책 이름 --
+				, RANK_NM		 -- 직급 이름 --
+		FROM	EMPLOYEE_JJY_MST
+		WHERE	EMPLOYEE_NO = #{employee_no}
+	</select>
 
 </mapper>
