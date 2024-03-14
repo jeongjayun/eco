@@ -28,46 +28,87 @@ $(document).ready(function () {
     $("#employeeList").jqGrid("addRowData", rowId + 1, data, "last");
   });
 
-  //TODO : 삭제버튼 누를 때 confirm 받을 수 있도록 개선.
-
   //삭제
   $("#btnDeleteRow").click(function () {
     let selectedRowId = $("#employeeList").getGridParam("selrow");
     let employee_no = $("#employeeList").getCell(selectedRowId, "employee_no");
 
-    if (selectedRowId) {
-      console.log("selectedRowId : " + selectedRowId);
-      console.log("selectedRowId의 employee_no : " + employee_no);
-
-      $.ajax({
-        type: "POST",
-        url: "/deleteEmployee/" + employee_no,
-        data: employee_no,
-        datatype: "text",
-        success: function (data) {
-          alert(
-            employee_no + "번의 사원을 삭제하였습니다.\n삭제한 데이터 : " + data
-          );
-          console.log(data);
-          $("#employeeList").delRowData(selectedRowId);
-        },
-        error: function (xhr, status, error) {
-          alert("실패 : " + xhr, status, error);
-          console.log("실패 : " + employee_no);
-          console.log(xhr, status, error);
-        },
-      });
-    } else {
+    if (!selectedRowId) {
+      console.log(selectedRowId);
       alert("삭제할 열을 선택해주세요.");
+    } else if (selectedRowId != null) {
+      let returnValue = confirm(employee_no + "번 직원을 삭제하시겠습니까?");
+      if (returnValue) {
+        console.log("selectedRowId : " + selectedRowId);
+        console.log("selectedRowId의 employee_no : " + employee_no);
+
+        $.ajax({
+          type: "POST",
+          url: "/deleteEmployee/" + employee_no,
+          data: employee_no,
+          datatype: "text",
+          success: function (data) {
+            alert(employee_no + "번의 사원을 삭제하였습니다.");
+            $("#employeeList").delRowData(selectedRowId);
+          },
+          error: function (xhr, status, error) {
+            alert("삭제 실패하였습니다." + error);
+            console.log("실패 : " + employee_no);
+            console.log(xhr, status, error);
+          },
+        });
+      }
     }
   });
 
   //저장
   $("#btnSaveRow").click(function () {
-    $("#employeeList").jqGrid("editCell", 0, 0, false);
+    //저장 버튼을 눌렀을 때 유효성 검사
+    let selectedRowId = $("#employeeList").getGridParam("selrow");
 
+    //체크대상 변수 선언
+    let employee_nm = $("#employeeList").getCell(selectedRowId, "employee_nm");
+    let hp_no = $("#employeeList").getCell(selectedRowId, "hp_no");
+    let email = $("#employeeList").getCell(selectedRowId, "email");
+    let entr_dt = $("#employeeList").getCell(selectedRowId, "entr_dt");
+    let retr_dt = $("#employeeList").getCell(selectedRowId, "retr_dt");
+    let wrk_typ_cd = $("#employeeList").getCell(selectedRowId, "wrk_typ_cd");
+    let pstn_nm = $("#employeeList").getCell(selectedRowId, "pstn_nm");
+    let rank_nm = $("#employeeList").getCell(selectedRowId, "rank_nm");
+    let reg_id = $("#employeeList").getCell(selectedRowId, "reg_id");
+    let mod_id = $("#employeeList").getCell(selectedRowId, "mod_id");
+
+    // 1. 이름을 입력하지 않았을 때
+    if (employee_nm !== "") {
+      if (employee_nm > 0) {
+        for (let i = 0; i < employee_nm.length; i++) {
+          char_employee_nm = employee_nm.charCodeAt(i);
+
+          if (char_employee_nm > 44031 && char_employee_nm < 55203) {
+            return true;
+          } else {
+            alert("한글만 입력해주세요.");
+            return false;
+          }
+        }
+      }
+    } else {
+      alert("이름이 비어있습니다. 이름을 입력해주세요.");
+      return false;
+    }
+
+    // 2. 휴대폰 번호 11자리 초과 시
+    if (hp_no.length > 11) {
+      console.log("hp_no : " + hp_no);
+      alert(
+        "입력 가능한 휴대폰 번호 수를 초과하였습니다. \n입력 확인해주세요."
+      );
+      return false;
+    }
+
+    //유효성 검사에 성공하면 아래 로직 실행
+    $("#employeeList").jqGrid("editCell", 0, 0, false); //편집 중인 cell 모두 닫기
     let params = $("#employeeList").getChangedCells("all");
-    console.log("params : ", params);
 
     $.ajax({
       type: "POST",
@@ -78,10 +119,10 @@ $(document).ready(function () {
       success: function (data) {
         console.log("성공 param: " + params);
         $("#employeeList").trigger("reloadGrid");
-        alert("성공한 데이터 : " + data + "개. \n새로고침 완료!");
+        alert("저장에 성공하였습니다.");
       },
       error: function (xhr, status, error) {
-        alert("실패 : " + xhr, status, error);
+        alert("저장에 실패하였습니다. ", error);
         console.log("실패 param : " + params);
         console.log(xhr, status, error);
       },
@@ -93,6 +134,7 @@ $(document).ready(function () {
     datatype: "json",
     url: "/getListNotAdmin",
     mtype: "POST",
+    sortable: true,
     loadonce: false,
     postData: {},
     caption: "직원 목록",
@@ -144,6 +186,7 @@ $(document).ready(function () {
           dataInit: function (e) {
             $(e).datepicker({
               dateFormat: "yy-mm-dd",
+              inputtype: "text",
               changeYear: true,
               changeMonth: true,
             });
@@ -160,6 +203,7 @@ $(document).ready(function () {
           dataInit: function (e) {
             $(e).datepicker({
               dateFormat: "yy-mm-dd",
+              inputtype: "text",
               changeYear: true,
               changeMonth: true,
             });
@@ -175,7 +219,14 @@ $(document).ready(function () {
         edittype: "select",
         formatter: "select",
         editoptions: {
-          value: { "00": "선택", "01": "출근", "02": "외근", "03": "파견" },
+          value: {
+            "00": "선택",
+            "01": "출근",
+            "02": "외근",
+            "03": "파견",
+            "04": "휴가",
+            "05": "퇴사",
+          },
         },
       },
       {
@@ -225,8 +276,8 @@ $(document).ready(function () {
       },
     ],
     rownumbers: true,
-    rowNum: 10,
-    rowList: [10, 20, 30],
+    rowNum: 100,
+    rowList: [100, 200, 300],
     multiselect: false,
 
     pager: "#employeePager",
@@ -242,6 +293,7 @@ $(document).ready(function () {
 
     cellEdit: true,
     cellsubmit: "clientArray",
-    cellurl: "",
+
+    afterEditCell: function (rowId, cellName, value, indexRow, indexCol) {},
   });
 });
