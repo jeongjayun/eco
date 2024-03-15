@@ -66,6 +66,8 @@ $(document).ready(function () {
     //저장 버튼을 눌렀을 때 유효성 검사
     let selectedRowId = $("#employeeList").getGridParam("selrow");
 
+    // TODO : 스크립트 작성 후 모듈화 해보기 (-)
+
     //체크대상 변수 선언
     let employee_nm = $("#employeeList").getCell(selectedRowId, "employee_nm");
     let hp_no = $("#employeeList").getCell(selectedRowId, "hp_no");
@@ -78,16 +80,32 @@ $(document).ready(function () {
     let reg_id = $("#employeeList").getCell(selectedRowId, "reg_id");
     let mod_id = $("#employeeList").getCell(selectedRowId, "mod_id");
 
-    // 1. 이름을 입력하지 않았을 때
+    // 1. 이름
     if (employee_nm !== "") {
-      if (employee_nm > 0) {
+      if (employee_nm.length > 0) {
         for (let i = 0; i < employee_nm.length; i++) {
-          char_employee_nm = employee_nm.charCodeAt(i);
+          charCodeEmployeeNm = employee_nm.charCodeAt(i); //charCodeAt : UTF-16 코드를 나타내는 0부터 65535 사이의 정수
 
-          if (char_employee_nm > 44031 && char_employee_nm < 55203) {
-            return true;
+          if (
+            (charCodeEmployeeNm >= 65 && charCodeEmployeeNm <= 122) ||
+            charCodeEmployeeNm == 32
+          ) {
+            //영어 : 대문자 ~ 소문자 + 공백허용
+            // 1-1 영문 이름
+            if (employee_nm.length > 9) {
+              alert("저장 가능한 글자 수를 초과하였습니다.");
+              return false;
+            }
+          } else if (charCodeEmployeeNm > 44031 && charCodeEmployeeNm < 55203) {
+            //한글
+            // 1-2 한글이름
+            if (employee_nm.length > 9) {
+              alert("저장 가능한 글자 수를 초과하였습니다.");
+              return false;
+            }
           } else {
-            alert("한글만 입력해주세요.");
+            // 그 외에 특수문자
+            alert("이름에는 영문 또는 한글만 입력 가능합니다.");
             return false;
           }
         }
@@ -97,12 +115,50 @@ $(document).ready(function () {
       return false;
     }
 
-    // 2. 휴대폰 번호 11자리 초과 시
-    if (hp_no.length > 11) {
-      console.log("hp_no : " + hp_no);
-      alert(
-        "입력 가능한 휴대폰 번호 수를 초과하였습니다. \n입력 확인해주세요."
-      );
+    // 2. 휴대폰 번호 (필수 값 아님)
+    if (hp_no !== "") {
+      if (hp_no.length > 0 && hp_no.length <= 11) {
+        for (i = 0; i < hp_no.length; i++) {
+          charCodeHpNo = hp_no.charCodeAt(i);
+          if (!(charCodeHpNo >= 48 && charCodeHpNo <= 57)) {
+            alert("숫자만 입력 가능합니다.\n입력 예시 : 01012345678");
+            return false;
+          }
+        }
+      } else {
+        //11자리 초과 시
+        alert(
+          "입력 가능한 휴대폰 번호 수를 초과하였습니다.\n입력 확인해주세요."
+        );
+        return false;
+      }
+    }
+
+    // 이메일 검증 : 영문과 숫자, 특수문자 @과 . 만 입력받기
+    if (email !== "") {
+      for (i = 0; i < email.length; i++) {
+        charCodeEmail = email.charCodeAt(i);
+        if (
+          !(charCodeEmail >= 48 && charCodeEmail <= 57) && //숫자가 아니고
+          !(charCodeEmail >= 65 && charCodeEmail <= 122) && //영어도 아니고
+          !(charCodeEmail == 64) && // @도 아니고
+          !(charCodeEmail == 46) // .도 아닐 때
+        ) {
+          alert("이메일에는 영문, 숫자, 특수기호(@, .)만 입력 가능합니다.");
+          return false;
+        }
+      }
+    }
+
+    // 근무 형태 코드 : 선택이 저장 되지 않도록
+    if (wrk_typ_cd === "00") {
+      alert("근무 형태 코드를 선택해주세요.");
+      return false;
+    }
+
+    // 직급 : 선택이 저장 되지 않도록
+    if (rank_nm === "선택") {
+      alert("직급을 선택해주세요.");
       return false;
     }
 
@@ -134,8 +190,6 @@ $(document).ready(function () {
     datatype: "json",
     url: "/getListNotAdmin",
     mtype: "POST",
-    sortable: true,
-    loadonce: false,
     postData: {},
     caption: "직원 목록",
     colNames: [
@@ -244,7 +298,7 @@ $(document).ready(function () {
         formatter: "select",
         editoptions: {
           value: {
-            전체: "선택",
+            선택: "선택",
             인턴: "인턴",
             사원: "사원",
             주임: "주임",
@@ -294,6 +348,8 @@ $(document).ready(function () {
     cellEdit: true,
     cellsubmit: "clientArray",
 
-    afterEditCell: function (rowId, cellName, value, indexRow, indexCol) {},
+    ondblclickRow: function (rowid, iRow, iCol, e) {
+      $("#employeeList").editGridRow(rowid, updateDialog);
+    },
   });
 });
