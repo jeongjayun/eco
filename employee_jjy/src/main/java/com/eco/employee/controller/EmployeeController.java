@@ -40,7 +40,7 @@ public class EmployeeController {
 		return saveChk;
 
 		// TODO : 여러줄 입력 시 ORA-00933: SQL 명령어가 올바르게 종료되지 않았습니다.
-		// TODO : datepicker 사용 후 entr, retr 의 수치부적합 오류 확인. 해결(-)
+
 	}
 
 	@PostMapping("/deleteEmployee/{employee_no}")
