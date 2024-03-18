@@ -18,8 +18,13 @@ public class EmployeeService {
 	public List<EmployeeDTO> getListNotAdmin() {
 		return employeeMapper.getListNotAdmin();
 	}
+	
+	public List<EmployeeDTO> getListByAdmin() {
+		return employeeMapper.getListByAdmin();
+	}
 
 	public int saveEmployee(List<EmployeeDTO> employeeDTOList) {
+		System.out.println("Service에서 확인한 employeeDTOList : " + employeeDTOList);
 		return employeeMapper.saveEmployee(employeeDTOList);
 	}
 	

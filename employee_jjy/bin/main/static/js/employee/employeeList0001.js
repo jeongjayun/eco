@@ -1,4 +1,56 @@
 $(document).ready(function () {
+  /*   //조회
+  $("#btnSearch").click(function () {
+    $("#employeeList").jqGrid("clearGridData");
+    var searchData = {
+      employee_no: "",
+      employee_nm: "",
+      hp_no: "",
+    };
+
+    $.ajax({
+      type: "POST",
+      url: "/getListByAdmin",
+      dataType: "JSON",
+      contentType: "application/json",
+      success: function (resultData) {
+        alert("성공");
+        console.log("성공한 경우 data : ", resultData);
+
+        let rowId = $("#employeeList").getGridParam("recount");
+        $("#employeeList").jqGrid("addRowData", rowId + 1, resultData, "first"); // 첫행에 Row 추가
+      },
+      error: function (xhr, status, error) {
+        alert("실패");
+        console.log("실패한 경우 data : ", searchData);
+        console.log(xhr, status, error);
+      },
+    });
+  }); */
+
+  //검색
+  //TODO : 쿼리짜야됨
+  $("#btnSearch").on("click", function () {
+    let data = $("#searchData").val();
+    let searchType = $("#searchType").val();
+    let rows = $("[title='Records per Page']").val();
+    var postData = { data: data, searchType: searchType, rows: rows };
+
+    rowData = null;
+
+    $("#employeeList").jqGrid("clearGridData", true);
+
+    $("#employeeList")
+      .setGridParam({
+        datatype: "json",
+        postData: postData,
+        loadComplete: function (data) {
+          console.log(data);
+        },
+      })
+      .trigger("reloadGrid");
+  });
+
   //신규 : 새로운 Row 생성
   $("#btnAddRow").click(function () {
     let rowId = $("#employeeList").getGridParam("reccount");
@@ -65,6 +117,13 @@ $(document).ready(function () {
   $("#btnSaveRow").click(function () {
     //저장 버튼을 눌렀을 때 유효성 검사
     let selectedRowId = $("#employeeList").getGridParam("selrow");
+
+    if (!selectedRowId) {
+      alert(
+        "저장할 열이 없습니다. 신규버튼을 클릭하여 내용 작성 후 다시 시도해주세요."
+      );
+      return false;
+    }
 
     // TODO : 스크립트 작성 후 모듈화 해보기 (-)
 
@@ -162,6 +221,24 @@ $(document).ready(function () {
       return false;
     }
 
+    // 입사일자
+    if (entr_dt === "") {
+      alert("입사일자는 공란일 수 없습니다.");
+      return false;
+    }
+
+    // 등록자
+    if (reg_id === "") {
+      alert("등록자를 입력해주세요.");
+      return false;
+    }
+
+    // 수정자
+    if (mod_id === "") {
+      alert("수정자를 입력해주세요.");
+      return false;
+    }
+
     //유효성 검사에 성공하면 아래 로직 실행
     $("#employeeList").jqGrid("editCell", 0, 0, false); //편집 중인 cell 모두 닫기
     let params = $("#employeeList").getChangedCells("all");
@@ -178,6 +255,7 @@ $(document).ready(function () {
         alert("저장에 성공하였습니다.");
       },
       error: function (xhr, status, error) {
+        $("#employeeList").trigger("reloadGrid");
         alert("저장에 실패하였습니다. ", error);
         console.log("실패 param : " + params);
         console.log(xhr, status, error);
@@ -190,6 +268,7 @@ $(document).ready(function () {
     datatype: "json",
     url: "/getListNotAdmin",
     mtype: "POST",
+    loadonce: false,
     postData: {},
     caption: "직원 목록",
     colNames: [
@@ -218,18 +297,27 @@ $(document).ready(function () {
         index: "employee_nm",
         align: "center",
         editable: true,
+        editrules: {
+          required: true,
+        },
       },
       {
         name: "hp_no",
         index: "hp_no",
         align: "center",
         editable: true,
+        editrules: {
+          number: true,
+        },
       },
       {
         name: "email",
         index: "email",
         align: "center",
         editable: true,
+        editrules: {
+          email: true,
+        },
       },
       {
         name: "entr_dt",
@@ -279,7 +367,6 @@ $(document).ready(function () {
             "02": "외근",
             "03": "파견",
             "04": "휴가",
-            "05": "퇴사",
           },
         },
       },
@@ -334,6 +421,8 @@ $(document).ready(function () {
     rowList: [100, 200, 300],
     multiselect: false,
 
+    emptyrecords: "데이터가 없습니다.",
+
     pager: "#employeePager",
     pgbuttons: true,
 
@@ -348,8 +437,19 @@ $(document).ready(function () {
     cellEdit: true,
     cellsubmit: "clientArray",
 
-    ondblclickRow: function (rowid, iRow, iCol, e) {
-      $("#employeeList").editGridRow(rowid, updateDialog);
+    ondblClickRow: function (rowId, iRow, iCol, e) {
+      if (iCol == 1) {
+        alert(rowId + "째 줄입니다.");
+      }
+    },
+
+    beforeSubmitCell: function (rowid, cellname, value) {
+      return { id: rowid, cellName: cellname, cellValue: value };
+    },
+    afterEditCell: function (rowid, cellname, value, iRow, iCol) {
+      $("#" + rowid + "_" + cellname).blur(function () {
+        $("#employeeList").jqGrid("saveCell", iRow, iCol);
+      });
     },
   });
 });

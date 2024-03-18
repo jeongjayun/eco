@@ -27,6 +27,13 @@ public class EmployeeController {
 		List<EmployeeDTO> employeeList = employeeService.getListNotAdmin();
 		return employeeList;
 	}
+	
+	@PostMapping("/getListByAdmin") // 전체 조회됨
+	@ResponseBody
+	public List<EmployeeDTO> getListByAdmin() {
+		List<EmployeeDTO> employeeList = employeeService.getListByAdmin();
+		return employeeList;
+	}
 
 	@PostMapping("/saveEmployee")
 	@ResponseBody
@@ -36,10 +43,11 @@ public class EmployeeController {
 
 		int saveChk = 0;
 		saveChk = employeeService.saveEmployee(employeeDTOList);
+		System.out.println("service 시행 후의 employeeDTOLIST : " + employeeDTOList);
 		System.out.println("saveChk = " + saveChk);
 		return saveChk;
 
-		// TODO : 여러줄 입력 시 ORA-00933: SQL 명령어가 올바르게 종료되지 않았습니다.
+		// TODO : 다중 저장쿼리로 변경 중. 입력 시 일부 값에서 NULL 또는 값이 크다는 오류 확인됨.
 
 	}
 

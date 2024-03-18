@@ -8,7 +8,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id = "getListNotAdmin" resultType = "EmployeeDTO">
 		SELECT	EMPLOYEE_NO      -- 직원 번호 --
 				, EMPLOYEE_NM	 -- 직원 이름 --
-				, TO_CHAR(HP_NO,'')			 -- 휴대폰 번호 --
+				, REGEXP_REPLACE(SUBSTR(HP_NO, 1, 3)|| LPAD('*', 4, '*')|| SUBSTR(HP_NO, -4),
+								 '(.{3})(.+)(.{4})', '\1-\2-\3') AS HP_NO -- 휴대폰 번호 --
 				, EMAIL			 -- 이메일 --
 				, TO_CHAR(TO_DATE(ENTR_DT, 'yyyy-mm-dd'), 'yyyy-mm-dd') AS ENTR_DT -- 입사 일자 --
 				, TO_CHAR(TO_DATE(RETR_DT, 'yyyy-mm-dd'), 'yyyy-mm-dd') AS RETR_DT -- 퇴사 일자 --
@@ -54,12 +55,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<insert id = "saveEmployee" parameterType="List">
-		<selectKey order="BEFORE" keyProperty="employee_no_seq">
-		<!-- resultmap 추가하기 -->
-			SELECT employee_no_seq.NEXTVAL FROM DUAL
-		</selectKey>
-		 <foreach collection="list" item="item" index="idx" separator=" " open="INSERT ALL" close="SELECT * FROM DUAL">
-			   INTO EMPLOYEE_JJY_MST
+		INSERT INTO EMPLOYEE_JJY_MST
 					( EMPLOYEE_NO		-- 자동채번 --
 					, EMPLOYEE_NM
 					, HP_NO
@@ -72,7 +68,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 					, ZIP_NO
 					, BIRTH_DT
 					, PSTN_NM
-					, RANK_NM			
+					, RANK_NM			-- Default : 주임 --
 					, DEL_YN			-- Default : N --
 					, REG_ID
 					, REG_DTM
@@ -80,11 +76,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 					, MOD_DTM
 					)
 			 VALUES 
-
+			 <foreach collection="list" item="item" separator=",">
 			 	(
 			 		 'E'
 			 		  ||(SELECT TO_CHAR(sysdate, 'yyyy') FROM DUAL)
-			 		  ||LPAD(employee_no_seq, 4, 0)
+			 		  ||LPAD(employee_no_seq.NEXTVAL, 4, 0)
 			 		, #{item.employee_nm}
 			 		, #{item.hp_no}
 			 		, #{item.email}

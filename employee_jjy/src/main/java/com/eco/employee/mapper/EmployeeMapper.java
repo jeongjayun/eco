@@ -11,6 +11,8 @@ public interface EmployeeMapper {
 	
 	List<EmployeeDTO> getListNotAdmin();
 	
+	List<EmployeeDTO> getListByAdmin();
+	
 	int saveEmployee(List<EmployeeDTO> employeeDTOList);
 	
 	int deleteEmployee(EmployeeDTO employeeDTO);
