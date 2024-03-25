@@ -26,6 +26,7 @@
 
 <!-- Include jqGrid language file (if needed) -->
 <script type="text/javascript" th:src="@{js/jqgrid/grid.locale-kr.js}"></script>
+<!-- <script type="text/javascript" th:src="@{js/jqgrid/grid.locale-en.js}"></script> -->
 
 <!-- jqGrid & action script -->
 <script type="text/javascript" th:src="@{js/employee/employeeList0001.js}"></script>
@@ -40,15 +41,15 @@
 		<div style = "margin-top : 20px; font-size : 12px;">
 			<select class = "form-control" style = "width : 10%; float : left;" id = "searchType">
 				<option value = "All" selected>전체 검색</option>
-				<option value = "employee_no">직원번호</option>
-				<option value = "employee_nm">이름</option>
-				<option value = "hp_no">휴대폰번호</option>
-				<option value = "email">이메일</option>
-				<option value = "wrk_typ_cd">근무형태코드</option>
-				<option value = "pstn_nm">직책</option>
-				<option value = "rank_nm">직급</option>
-				<option value = "reg_id">등록자</option>
-				<option value = "mod_id">수정자</option>
+				<option value = "EMPLOYEE_NO">직원번호</option>
+				<option value = "EMPLOYEE_NM">이름</option>
+				<option value = "HP_NO">휴대폰번호</option>
+				<option value = "EMAIL">이메일</option>
+				<option value = "WRK_TYP_CD">근무형태코드</option>
+				<option value = "PSTN_NM">직책</option>
+				<option value = "RANK_NM">직급</option>
+				<option value = "REG_ID">등록자</option>
+				<option value = "MOD_ID">수정자</option>
 			</select>
 			<input type ="text" id = "searchData" class ="form-control" style = "width : 30%; float : left; margin-bottom : 50px; margin-left : 10px;">
 			<button class = "btn btn-dark btn-fill" id = "btnSearch" value = "조회 " style = "width : 10%; float : left; margin-left : 10px;">

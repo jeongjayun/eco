@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.eco.employee.dto.EmployeeDTO;
@@ -27,7 +28,7 @@ public class EmployeeController {
 		List<EmployeeDTO> employeeList = employeeService.getListNotAdmin();
 		return employeeList;
 	}
-	
+
 	@PostMapping("/getListByAdmin") // 전체 조회됨
 	@ResponseBody
 	public List<EmployeeDTO> getListByAdmin() {
@@ -67,5 +68,19 @@ public class EmployeeController {
 		return deleteChk;
 
 		// TODO : 한 번에 한 명만 삭제할 수 있음.여러 명 삭제할 수 있도록 개선필요.
+	}
+
+	@PostMapping("/search")
+	@ResponseBody
+	public List<EmployeeDTO> postSearch(@RequestBody @RequestParam("searchType") String searchType,
+			@RequestParam("data") String data) {
+		System.out.println("클라이언트에서 선택한 검색 카테고리 : " + searchType);
+		System.out.println("클라이언트에서 입력한 검색어 : " + data);
+		
+		List<EmployeeDTO> searchEmployeeList = employeeService.searchEmployee(searchType, data);
+		
+		System.out.println("EmployeeService 에서 반환한 값 : " + searchEmployeeList);
+		return searchEmployeeList;
+		
 	}
 }

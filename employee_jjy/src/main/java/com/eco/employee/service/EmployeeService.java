@@ -24,18 +24,27 @@ public class EmployeeService {
 	}
 
 	public int saveEmployee(List<EmployeeDTO> employeeDTOList) {
-		System.out.println("Service에서 확인한 employeeDTOList : " + employeeDTOList);
 		return employeeMapper.saveEmployee(employeeDTOList);
 	}
 	
 	public int deleteEmployee(EmployeeDTO employeeDTO) {
-		System.out.println("EmployeeService에서 deleteEmployee 실행");
 		return employeeMapper.deleteEmployee(employeeDTO);
 	}
 	
 	public EmployeeDTO searchEmployeeByEmployeeNo(String employee_no) {
-		System.out.println("EmployeeService 에서 employee_no로 사원찾기");
 		return employeeMapper.searchEmployeeByEmployeeNo(employee_no);
+	}
+	
+	public List<EmployeeDTO> searchEmployee(String searchType, String data){
+		System.out.println("Controller 에서 넘어온 searchType : " + searchType);
+		System.out.println("Controller 에서 넘어온 data : " + data);
+		
+		System.out.println("EmployeeService, searchEmployee 실행");
+		
+		List<EmployeeDTO> employeeList = employeeMapper.searchEmployee(searchType, data);
+		System.out.println("Service 결과 : " + employeeList);
+		
+		return employeeList;
 	}
 
 }

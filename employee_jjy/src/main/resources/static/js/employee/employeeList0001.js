@@ -29,20 +29,28 @@ $(document).ready(function () {
   }); */
 
   //검색
-  //TODO : 쿼리짜야됨
   $("#btnSearch").on("click", function () {
     let data = $("#searchData").val();
     let searchType = $("#searchType").val();
-    let rows = $("[title='Records per Page']").val();
-    var postData = { data: data, searchType: searchType, rows: rows };
+    let postData = { data: data, searchType: searchType };
 
-    rowData = null;
+    console.log("data : ", data);
+    console.log("searchType : ", searchType);
+    console.log("postData : ", postData);
+
+    if (searchType == "All" && data == "") {
+      $("#employeeList").jqGrid("clearGridData");
+      $("#employeeList").trigger("reloadGrid");
+      return false;
+    }
 
     $("#employeeList").jqGrid("clearGridData", true);
 
     $("#employeeList")
       .setGridParam({
         datatype: "json",
+        mtype: "POST",
+        url: "/search",
         postData: postData,
         loadComplete: function (data) {
           console.log(data);
@@ -250,8 +258,8 @@ $(document).ready(function () {
       datatype: "text",
       contentType: "application/json",
       success: function (data) {
-        console.log("성공 param: " + params);
         $("#employeeList").trigger("reloadGrid");
+        console.log("성공 param: " + params);
         alert("저장에 성공하였습니다.");
       },
       error: function (xhr, status, error) {
@@ -422,6 +430,10 @@ $(document).ready(function () {
     multiselect: false,
 
     emptyrecords: "데이터가 없습니다.",
+
+    sortable: true,
+    sortorder: "asc",
+    sortname: "employee_no",
 
     pager: "#employeePager",
     pgbuttons: true,

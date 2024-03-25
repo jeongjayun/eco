@@ -28,6 +28,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 		FROM	EMPLOYEE_JJY_MST
 		WHERE DEL_YN = 'N'
+		ORDER BY EMPLOYEE_NO ASC
 	</select>
 	
 	<!-- 관리자 권한 있을 때 조회목록 -->
@@ -131,6 +132,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				, RANK_NM		 -- 직급 이름 --
 		FROM	EMPLOYEE_JJY_MST
 		WHERE	EMPLOYEE_NO = #{employee_no}
+	</select>
+	
+	<select id ="searchEmployee" parameterType="hashMap" resultType ="EmployeeDTO">
+		SELECT *
+		  FROM EMPLOYEE_JJY_MST
+		
+		<if test="searchType != 'ALL' and data != null">
+         WHERE ${searchType} LIKE '%' || #{data} || '%'
+   		</if>
+
 	</select>
 
 </mapper>
