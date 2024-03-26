@@ -1,32 +1,42 @@
 $(document).ready(function () {
-  /*   //조회
-  $("#btnSearch").click(function () {
-    $("#employeeList").jqGrid("clearGridData");
-    var searchData = {
-      employee_no: "",
-      employee_nm: "",
-      hp_no: "",
-    };
+  //조회
+  $("#flexSwitchCheckDefault").on("click", function () {
+    const changeAdmin = document.querySelector("#flexSwitchCheckDefault");
+    const checkedChangeAdmin = changeAdmin.checked;
+    console.log("checkedChangeAdmin ", checkedChangeAdmin);
 
-    $.ajax({
-      type: "POST",
-      url: "/getListByAdmin",
-      dataType: "JSON",
-      contentType: "application/json",
-      success: function (resultData) {
-        alert("성공");
-        console.log("성공한 경우 data : ", resultData);
+    if (checkedChangeAdmin) {
+      //클릭하면 관리자 목록 (DEL_YN = Y 포함)
+      alert("삭제된 직원들 포함하여 목록을 불러옵니다.");
 
-        let rowId = $("#employeeList").getGridParam("recount");
-        $("#employeeList").jqGrid("addRowData", rowId + 1, resultData, "first"); // 첫행에 Row 추가
-      },
-      error: function (xhr, status, error) {
-        alert("실패");
-        console.log("실패한 경우 data : ", searchData);
-        console.log(xhr, status, error);
-      },
-    });
-  }); */
+      $("#employeeList")
+        .setGridParam({
+          datatype: "json",
+          mtype: "POST",
+          url: "/getListByAdmin",
+          postData: {},
+          loadComplete: function (data) {
+            console.log(data);
+          },
+        })
+        .trigger("reloadGrid");
+    } else {
+      //클릭하면 관리자 아닌 목록 (DEL_YN =N)
+      alert("삭제된 직원들 제외하고 목록을 불러옵니다.");
+
+      $("#employeeList")
+        .setGridParam({
+          datatype: "json",
+          mtype: "POST",
+          url: "/getListNotAdmin",
+          postData: {},
+          loadComplete: function (data) {
+            console.log(data);
+          },
+        })
+        .trigger("reloadGrid");
+    }
+  });
 
   //검색
   $("#btnSearch").on("click", function () {
@@ -38,25 +48,29 @@ $(document).ready(function () {
     console.log("searchType : ", searchType);
     console.log("postData : ", postData);
 
-    if (searchType == "All" && data == "") {
-      $("#employeeList").jqGrid("clearGridData");
-      $("#employeeList").trigger("reloadGrid");
+    if (searchType == "select" && data != "") {
+      //'검색조건 없음', '검색어 있음' 이면
+      alert("검색 조건을 선택하세요.");
       return false;
+    } else if (searchType != "select" && data == "") {
+      //'검색조건 있음', '검색어 없음' 이면
+      alert("검색어를 입력하세요.");
+      return false;
+    } else {
+      $("#employeeList").jqGrid("clearGridData", true);
+
+      $("#employeeList")
+        .setGridParam({
+          datatype: "json",
+          mtype: "POST",
+          url: "/search",
+          postData: postData,
+          loadComplete: function (data) {
+            console.log(data);
+          },
+        })
+        .trigger("reloadGrid");
     }
-
-    $("#employeeList").jqGrid("clearGridData", true);
-
-    $("#employeeList")
-      .setGridParam({
-        datatype: "json",
-        mtype: "POST",
-        url: "/search",
-        postData: postData,
-        loadComplete: function (data) {
-          console.log(data);
-        },
-      })
-      .trigger("reloadGrid");
   });
 
   //신규 : 새로운 Row 생성
@@ -258,8 +272,13 @@ $(document).ready(function () {
       datatype: "text",
       contentType: "application/json",
       success: function (data) {
-        $("#employeeList").trigger("reloadGrid");
-        console.log("성공 param: " + params);
+        $("#employeeList")
+          .setGridParam({
+            datatype: "json",
+            mtype: "POST",
+            url: "/getListNotAdmin",
+          })
+          .trigger("reloadGrid");
         alert("저장에 성공하였습니다.");
       },
       error: function (xhr, status, error) {
@@ -276,7 +295,7 @@ $(document).ready(function () {
     datatype: "json",
     url: "/getListNotAdmin",
     mtype: "POST",
-    loadonce: false,
+    loadonce: true,
     postData: {},
     caption: "직원 목록",
     colNames: [
@@ -304,6 +323,7 @@ $(document).ready(function () {
         name: "employee_nm",
         index: "employee_nm",
         align: "center",
+        width: "80px",
         editable: true,
         editrules: {
           required: true,
@@ -340,7 +360,6 @@ $(document).ready(function () {
               changeYear: true,
               changeMonth: true,
             });
-            $(e).datepicker("setDate", "today");
           },
         },
       },
@@ -357,7 +376,6 @@ $(document).ready(function () {
               changeYear: true,
               changeMonth: true,
             });
-            $(e).datepicker("setDate", "today");
           },
         },
       },
@@ -388,6 +406,7 @@ $(document).ready(function () {
         name: "rank_nm",
         index: "rank_nm",
         align: "center",
+        width: "70px",
         editable: true,
         edittype: "select",
         formatter: "select",
@@ -425,9 +444,9 @@ $(document).ready(function () {
       },
     ],
     rownumbers: true,
-    rowNum: 100,
-    rowList: [100, 200, 300],
-    multiselect: false,
+    rowNum: 10,
+    rowList: [10, 20, 30],
+    multiselect: true,
 
     emptyrecords: "데이터가 없습니다.",
 

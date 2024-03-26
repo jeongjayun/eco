@@ -40,7 +40,7 @@
 
 		<div style = "margin-top : 20px; font-size : 12px;">
 			<select class = "form-control" style = "width : 10%; float : left;" id = "searchType">
-				<option value = "All" selected>전체 검색</option>
+				<option value = "select" selected>선택</option>
 				<option value = "EMPLOYEE_NO">직원번호</option>
 				<option value = "EMPLOYEE_NM">이름</option>
 				<option value = "HP_NO">휴대폰번호</option>
@@ -51,21 +51,29 @@
 				<option value = "REG_ID">등록자</option>
 				<option value = "MOD_ID">수정자</option>
 			</select>
-			<input type ="text" id = "searchData" class ="form-control" style = "width : 30%; float : left; margin-bottom : 50px; margin-left : 10px;">
-			<button class = "btn btn-dark btn-fill" id = "btnSearch" value = "조회 " style = "width : 10%; float : left; margin-left : 10px;">
-			  조회
+			<input type ="text" id = "searchData" class ="form-control" style = "width : 20%; float : left; margin-bottom : 50px; margin-left : 10px;">
+			<button class = "btn btn-dark btn-fill" id = "btnSearch" value = "검색" style = "width : 10%; float : left; margin-left : 10px;">
+			  검색
 			</button>
 
-			<div class="row-fluid">
-				<!-- <button type="button" class="btn btn-dark" style="float:right" id="btnSearch">조회</button> -->
-				<button type="button" class="btn btn-dark" style="float:right"  id="btnAddRow">신규</button>
-				<button type="button" class="btn btn-danger" style="float:right"  id="btnDeleteRow">삭제</button>
-				<button type="button" class="btn btn-primary" style="float:right"  id="btnSaveRow">저장</button>
+			<div class="row-fluid" style="float:right">
+
+				<div class="form-check form-switch">
+					<input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+					<label class="form-check-label" for="flexSwitchCheckDefault">관리자</label>
+				</div>
+				
+				<button type="button" class="btn btn-dark"  id="btnAddRow">신규</button>
+				<button type="button" class="btn btn-danger"  id="btnDeleteRow">삭제</button>
+				<button type="button" class="btn btn-primary" id="btnSaveRow">저장</button>
 			</div>
+
 		</div>
 
 		<br>
 		<br>
+		<br>
+		
 		<table id="employeeList">
 		</table>
 
