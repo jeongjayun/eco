@@ -76,11 +76,14 @@ public class EmployeeController {
 			@RequestParam("data") String data) {
 		System.out.println("클라이언트에서 선택한 검색 카테고리 : " + searchType);
 		System.out.println("클라이언트에서 입력한 검색어 : " + data);
-		
-		List<EmployeeDTO> searchEmployeeList = employeeService.searchEmployee(searchType, data);
-		
-		System.out.println("EmployeeService 에서 반환한 값 : " + searchEmployeeList);
-		return searchEmployeeList;
-		
+
+		if ("select".equals(searchType) && (data.isEmpty() || data.isBlank())) {
+			List<EmployeeDTO> employeeList = employeeService.getListNotAdmin();
+			return employeeList;
+		} else {
+			List<EmployeeDTO> searchEmployeeList = employeeService.searchEmployee(searchType, data);
+			System.out.println("EmployeeService 에서 반환한 값 : " + searchEmployeeList);
+			return searchEmployeeList;
+		}
 	}
 }
