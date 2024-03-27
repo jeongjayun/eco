@@ -20,6 +20,6 @@ public interface EmployeeMapper {
 
 	EmployeeDTO searchEmployeeByEmployeeNo(String employee_no);
 
-	List<EmployeeDTO> searchEmployee(@Param("searchType") String searchType, @Param("data") String data);
+	List<EmployeeDTO> searchEmployee(@Param("searchType") String searchType, @Param("data") String data, @Param("checkSwitchDelYn") String checkSwitchDelYn);
 
 }

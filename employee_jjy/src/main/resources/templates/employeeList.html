@@ -8,8 +8,8 @@
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 <!-- Include necessary CSS files -->
-<link rel="stylesheet" type="text/css" th:href="@{css/jquery-ui.css}">
-<link rel="stylesheet" type="text/css" th:href="@{css/ui.jqgrid.css}">
+<link rel="stylesheet" type="text/css" th:href="@{css/jquery-ui.css}"> <!-- 1.13.2 ver -->
+<link rel="stylesheet" type="text/css" th:href="@{css/ui.jqgrid.css}"> <!-- 1.13.2 ver -->
 <link rel="stylesheet" type="text/css"  
     th:href="@{css/ui.multiselect.css}">
 
@@ -17,19 +17,19 @@
 <link rel="stylesheet" type="text/css" th:href="@{css/bootstrap.css}"> 
 
 <!-- Include jQuery library -->  
-<script type="text/javascript" th:src="@{js/jquery-3.2.1.js}"></script>
-<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+<script type="text/javascript" th:src="@{js/jquery-3.7.1.min.js}"></script>
+<script type="text/javascript" th:src="@{js/jquery-ui.min.js}"></script> <!-- 1.13.2 ver -->
 
 <!-- Include jqGrid plugin -->  
 <script type="text/javascript"  
     th:src="@{js/jqgrid/jquery.jqGrid.min.js}"></script>  
 
-<!-- Include jqGrid language file (if needed) -->
+<!-- Include jqGrid language file -->
 <script type="text/javascript" th:src="@{js/jqgrid/grid.locale-kr.js}"></script>
-<!-- <script type="text/javascript" th:src="@{js/jqgrid/grid.locale-en.js}"></script> -->
 
 <!-- jqGrid & action script -->
-<script type="text/javascript" th:src="@{js/employee/employeeList0001.js}"></script>
+<script type="text/javascript" th:src="@{js/employeeList/settings.js}"></script>
+<script type="text/javascript" th:src="@{js/employeeList/functions.js}"></script>
 
 <title>사원 정보</title>
 </head>
@@ -45,7 +45,7 @@
 				<option value = "EMPLOYEE_NM">이름</option>
 				<option value = "HP_NO">휴대폰번호</option>
 				<option value = "EMAIL">이메일</option>
-				<option value = "WRK_TYP_CD">근무형태코드</option>
+				<option value = "WRK_TYP_CD">근무형태</option>
 				<option value = "PSTN_NM">직책</option>
 				<option value = "RANK_NM">직급</option>
 				<option value = "REG_ID">등록자</option>
@@ -57,15 +57,13 @@
 			</button>
 
 			<div class="row-fluid" style="float:right">
-
-				<div class="form-check form-switch">
-					<input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
-					<label class="form-check-label" for="flexSwitchCheckDefault">관리자</label>
-				</div>
-				
 				<button type="button" class="btn btn-dark"  id="btnAddRow">신규</button>
 				<button type="button" class="btn btn-danger"  id="btnDeleteRow">삭제</button>
 				<button type="button" class="btn btn-primary" id="btnSaveRow">저장</button>
+				<div class="form-check form-switch" style="margin-top:5px">
+					<input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+					<label class="form-check-label" for="flexSwitchCheckDefault">삭제 항목 포함 조회</label>
+				</div>
 			</div>
 
 		</div>

@@ -73,15 +73,24 @@ public class EmployeeController {
 	@PostMapping("/search")
 	@ResponseBody
 	public List<EmployeeDTO> postSearch(@RequestBody @RequestParam("searchType") String searchType,
-			@RequestParam("data") String data) {
+			@RequestParam("data") String data, @RequestParam("checkSwitchDelYn") String checkSwitchDelYn) {
 		System.out.println("클라이언트에서 선택한 검색 카테고리 : " + searchType);
 		System.out.println("클라이언트에서 입력한 검색어 : " + data);
+		System.out.println("클라이언트에서 받아온 checkSwitchDelYn : " + checkSwitchDelYn);
 
 		if ("select".equals(searchType) && (data.isEmpty() || data.isBlank())) {
-			List<EmployeeDTO> employeeList = employeeService.getListNotAdmin();
-			return employeeList;
+			// 전체 보기로 돌아가기 
+			if("true".equals(checkSwitchDelYn)) {
+				// 삭제 항목 포함된 경우 
+				List<EmployeeDTO> employeeList = employeeService.getListByAdmin();
+				return employeeList;
+			} else {
+				// 아닌 경우
+				List<EmployeeDTO> employeeList = employeeService.getListNotAdmin();
+				return employeeList;
+			}
 		} else {
-			List<EmployeeDTO> searchEmployeeList = employeeService.searchEmployee(searchType, data);
+			List<EmployeeDTO> searchEmployeeList = employeeService.searchEmployee(searchType, data, checkSwitchDelYn);
 			System.out.println("EmployeeService 에서 반환한 값 : " + searchEmployeeList);
 			return searchEmployeeList;
 		}

@@ -35,9 +35,10 @@ public class EmployeeService {
 		return employeeMapper.searchEmployeeByEmployeeNo(employee_no);
 	}
 
-	public List<EmployeeDTO> searchEmployee(String searchType, String data) {
+	public List<EmployeeDTO> searchEmployee(String searchType, String data, String checkSwitchDelYn) {
 		System.out.println("Controller 에서 넘어온 searchType : " + searchType);
 		System.out.println("Controller 에서 넘어온 data : " + data);
+		System.out.println("Controller 에서 넘어온 checkSwitchDelYn : " + checkSwitchDelYn);
 
 		System.out.println("EmployeeService, searchEmployee 실행");
 		
@@ -55,14 +56,14 @@ public class EmployeeService {
 			
 			System.out.println("입력된 data : " + data +"-> strData 변환 : " +  strData);
 
-			List<EmployeeDTO> employeeList = employeeMapper.searchEmployee(searchType, strData);
+			List<EmployeeDTO> employeeList = employeeMapper.searchEmployee(searchType, strData, checkSwitchDelYn);
 			System.out.println("Service 결과 : " + employeeList);
 
 			return employeeList;
 
 		} else {
 
-			List<EmployeeDTO> employeeList = employeeMapper.searchEmployee(searchType, data);
+			List<EmployeeDTO> employeeList = employeeMapper.searchEmployee(searchType, data, checkSwitchDelYn);
 			System.out.println("Service 결과 : " + employeeList);
 
 			return employeeList;

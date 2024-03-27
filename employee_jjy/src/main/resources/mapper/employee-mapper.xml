@@ -8,8 +8,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id = "getListNotAdmin" resultType = "EmployeeDTO">
 		SELECT	EMPLOYEE_NO      -- 직원 번호 --
 				, EMPLOYEE_NM	 -- 직원 이름 --
-				, REGEXP_REPLACE(SUBSTR(HP_NO, 1, 3)|| LPAD('*', 4, '*')|| SUBSTR(HP_NO, -4),
-								 '(.{3})(.+)(.{4})', '\1-\2-\3') AS HP_NO -- 휴대폰 번호 --
+				, REGEXP_REPLACE (HP_NO, '(.{3})(.+)(.{4})', '\1-\2-\3') AS HP_NO -- 휴대폰 번호 --
 				, EMAIL			 -- 이메일 --
 				, TO_CHAR(TO_DATE(ENTR_DT, 'yyyy-mm-dd'), 'yyyy-mm-dd') AS ENTR_DT -- 입사 일자 --
 				, TO_CHAR(TO_DATE(RETR_DT, 'yyyy-mm-dd'), 'yyyy-mm-dd') AS RETR_DT -- 퇴사 일자 --
@@ -35,8 +34,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id = "getListByAdmin" resultType = "EmployeeDTO">
 		SELECT	EMPLOYEE_NO      -- 직원 번호 --
 				, EMPLOYEE_NM	 -- 직원 이름 --
-				, REGEXP_REPLACE(SUBSTR(HP_NO, 1, 3)|| LPAD('*', 4, '*')|| SUBSTR(HP_NO, -4),
-								 '(.{3})(.+)(.{4})', '\1-\2-\3') AS HP_NO -- 휴대폰 번호 --
+				, REGEXP_REPLACE (HP_NO, '(.{3})(.+)(.{4})', '\1-\2-\3') AS HP_NO -- 휴대폰 번호 --
 				, EMAIL			 -- 이메일 --
 				, TO_CHAR(TO_DATE(ENTR_DT, 'yyyy-mm-dd'), 'yyyy-mm-dd') AS ENTR_DT -- 입사 일자 --
 				, TO_CHAR(TO_DATE(RETR_DT, 'yyyy-mm-dd'), 'yyyy-mm-dd') AS RETR_DT -- 퇴사 일자 --
@@ -160,7 +158,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				, TO_CHAR(TO_DATE(MOD_DTM, 'yyyy-mm-dd hh24:mi:ss'), 'yyyy-mm-dd hh24:mi:ss') AS MOD_DTM -- 수정 일시 --
 
 		  FROM EMPLOYEE_JJY_MST
-		 WHERE DEL_YN = 'N'
+		<choose>
+			<when test="checkSwitchDelYn == 'true'">
+				WHERE DEL_YN = 'Y'
+			</when>
+			<otherwise>
+				WHERE DEL_YN = 'N'
+			</otherwise>
+		</choose>
 		<if test="searchType != 'select' and data != null">
          	   AND ${searchType} LIKE '%' || #{data} || '%'
    		</if>
