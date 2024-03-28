@@ -16,10 +16,11 @@ public interface EmployeeMapper {
 
 	int saveEmployee(List<EmployeeDTO> employeeDTOList);
 
-	int deleteEmployee(EmployeeDTO employeeDTO);
+	int deleteEmployee(String employee_no);
 
 	EmployeeDTO searchEmployeeByEmployeeNo(String employee_no);
 
 	List<EmployeeDTO> searchEmployee(@Param("searchType") String searchType, @Param("data") String data, @Param("checkSwitchDelYn") String checkSwitchDelYn);
 
+	int overRetrDtEmployee();
 }

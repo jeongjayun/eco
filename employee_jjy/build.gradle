@@ -22,26 +22,22 @@ repositories {
 }
 
 dependencies {
-	//db
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-	runtimeOnly 'com.oracle.database.jdbc:ojdbc11'
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
-	testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.3'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16'  /* Log4JDBC */
 	
-	//lombok
+	runtimeOnly 'com.oracle.database.jdbc:ojdbc11'
+	
 	annotationProcessor 'org.projectlombok:lombok'
 	compileOnly 'org.projectlombok:lombok'
 	
-	//spring
-	implementation 'org.springframework.boot:spring-boot-starter-web'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	
-	//view
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-
-	//test
+	testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.3'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-
+	
 }
 
 tasks.named('test') {

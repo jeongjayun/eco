@@ -5,8 +5,8 @@ server:
 # database
 spring:
   datasource:
-    driver-class-name: oracle.jdbc.OracleDriver
-    url: jdbc:oracle:thin:@192.168.0.101:1521/xe
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    url: jdbc:log4jdbc:oracle:thin:@192.168.0.101:1521/xe
     username: eco_fresh
     password: eco1505!
 
@@ -14,12 +14,3 @@ spring:
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   config-location: classpath:mybatis-config.xml
-
-# logging
-logging:
-  level:
-    com:
-      eco:
-        employee:
-          mapper :
-            mybatis : debug

@@ -27,21 +27,11 @@ public class EmployeeService {
 		return employeeMapper.saveEmployee(employeeDTOList);
 	}
 
-	public int deleteEmployee(EmployeeDTO employeeDTO) {
-		return employeeMapper.deleteEmployee(employeeDTO);
-	}
-
-	public EmployeeDTO searchEmployeeByEmployeeNo(String employee_no) {
-		return employeeMapper.searchEmployeeByEmployeeNo(employee_no);
+	public int deleteEmployee(String employee_no) {
+		return employeeMapper.deleteEmployee(employee_no);
 	}
 
 	public List<EmployeeDTO> searchEmployee(String searchType, String data, String checkSwitchDelYn) {
-		System.out.println("Controller 에서 넘어온 searchType : " + searchType);
-		System.out.println("Controller 에서 넘어온 data : " + data);
-		System.out.println("Controller 에서 넘어온 checkSwitchDelYn : " + checkSwitchDelYn);
-
-		System.out.println("EmployeeService, searchEmployee 실행");
-		
 		// 입력값과 DB의 표시된 값이 다른 경우 예외처리
 		if ("WRK_TYP_CD".equals(searchType)) {
 			System.out.println("searchType 으로 근무형태코드가 들어온 경우");
@@ -53,21 +43,19 @@ public class EmployeeService {
 			case "휴가" -> "04";
 			default -> throw new IllegalArgumentException("Unexpected value: " + data);
 			};
-			
-			System.out.println("입력된 data : " + data +"-> strData 변환 : " +  strData);
+
+			System.out.println("입력된 data : " + data + "-> strData 변환 : " + strData);
 
 			List<EmployeeDTO> employeeList = employeeMapper.searchEmployee(searchType, strData, checkSwitchDelYn);
-			System.out.println("Service 결과 : " + employeeList);
-
 			return employeeList;
-
 		} else {
-
 			List<EmployeeDTO> employeeList = employeeMapper.searchEmployee(searchType, data, checkSwitchDelYn);
-			System.out.println("Service 결과 : " + employeeList);
-
 			return employeeList;
 		}
+
 	}
 
+	public int overRetrDtEmployee() {
+		return employeeMapper.overRetrDtEmployee();
+	}
 }

@@ -19,7 +19,7 @@ $(document).ready(function () {
         .setGridParam({
           datatype: "json",
           mtype: "POST",
-          url: "/getListByAdmin",
+          url: "/api/list/all",
           postData: {},
           loadComplete: function (data) {
             console.log(data);
@@ -38,7 +38,7 @@ $(document).ready(function () {
         .setGridParam({
           datatype: "json",
           mtype: "POST",
-          url: "/getListNotAdmin",
+          url: "/api/list",
           postData: {},
           loadComplete: function (data) {
             console.log(data);
@@ -77,7 +77,7 @@ $(document).ready(function () {
         .setGridParam({
           datatype: "json",
           mtype: "POST",
-          url: "/search",
+          url: "/api/search",
           postData: postData,
           loadComplete: function (data) {
             console.log(data);
@@ -132,7 +132,7 @@ $(document).ready(function () {
 
         $.ajax({
           type: "POST",
-          url: "/deleteEmployee/" + employee_no,
+          url: "/api/delete/" + employee_no,
           data: employee_no,
           datatype: "text",
           success: function (data) {
@@ -168,9 +168,7 @@ $(document).ready(function () {
     let hp_no = $("#employeeList").getCell(selectedRowId, "hp_no");
     let email = $("#employeeList").getCell(selectedRowId, "email");
     let entr_dt = $("#employeeList").getCell(selectedRowId, "entr_dt");
-    let retr_dt = $("#employeeList").getCell(selectedRowId, "retr_dt");
     let wrk_typ_cd = $("#employeeList").getCell(selectedRowId, "wrk_typ_cd");
-    let pstn_nm = $("#employeeList").getCell(selectedRowId, "pstn_nm");
     let rank_nm = $("#employeeList").getCell(selectedRowId, "rank_nm");
     let reg_id = $("#employeeList").getCell(selectedRowId, "reg_id");
     let mod_id = $("#employeeList").getCell(selectedRowId, "mod_id");
@@ -281,7 +279,7 @@ $(document).ready(function () {
 
     $.ajax({
       type: "POST",
-      url: "/saveEmployee",
+      url: "/api/save",
       data: JSON.stringify(params),
       datatype: "text",
       contentType: "application/json",
@@ -290,7 +288,7 @@ $(document).ready(function () {
           .setGridParam({
             datatype: "json",
             mtype: "POST",
-            url: "/getListNotAdmin",
+            url: "/api/list",
           })
           .trigger("reloadGrid");
         alert("저장에 성공하였습니다.");

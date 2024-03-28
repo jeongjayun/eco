@@ -46,7 +46,7 @@ $(document).ready(function () {
   //jqGrid
   https: $("#employeeList").jqGrid({
     datatype: "json",
-    url: "/getListNotAdmin",
+    url: "/api/list",
     mtype: "POST",
     loadonce: true,
     postData: {},
