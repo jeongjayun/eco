@@ -41,6 +41,7 @@ $(document).ready(function () {
     dayNamesMin: ["일", "월", "화", "수", "목", "금", "토"],
     showMonthAfterYear: true,
     yearSuffix: "년",
+    showButtonPanel: true,
   });
 
   //jqGrid
@@ -113,7 +114,6 @@ $(document).ready(function () {
                 $(element).datepicker("option", "minDate", selectedDate);
               },
             });
-            $(e).datepicker("setDate", "today");
           },
         },
       },
@@ -125,12 +125,11 @@ $(document).ready(function () {
         editoptions: {
           dataInit: function (element) {
             $(element).datepicker({
-              minDate: 0,
+              maxDate: 0,
               onClose: function (selectedDate) {
                 $(element).datepicker("option", "maxDate", selectedDate);
               },
             });
-            $(e).datepicker("setDate", "today");
           },
         },
       },
