@@ -1,8 +1,6 @@
 <template>
-  <div>{{ message }}</div>
-
-  <table>
-    <thead>
+  <table class="table table-striped table-hover table-bordered">
+    <thead style="text-align: center">
       <th>직원번호</th>
       <th>이름</th>
       <th>휴대폰 번호</th>
@@ -41,31 +39,19 @@
 export default {
   data() {
     return {
-      message: "여기는 components 폴더 아래에 있는 List.vue 파일 입니다.",
-      employees: [
-        {
-          employee_no: "E20249999",
-          employee_nm: "sample",
-          hp_no: "010-9999-8888",
-          email: "test@eco.co.kr",
-          entr_dt: "2024-03-29",
-          retr_dt: "미정",
-          wrk_typ_cd: "01",
-          pstn_nm: "직책",
-          rank_nm: "직급",
-          reg_id: "E20240000",
-          reg_dtm: "2024-03-29",
-          mod_id: "E20240000",
-          mod_dtm: "2024-03-29",
-        },
-      ],
+      employees: [],
     };
+  },
+  created() {
+    this.axios
+      .post("/api/list")
+      .then((response) => (this.employees = response.data))
+      .catch((error) => {
+        alert("error", error);
+        console.log(error);
+      });
   },
 };
 </script>
 
-<style scoped>
-table {
-  border: 1px solid black;
-}
-</style>
+<style scoped></style>

@@ -1,9 +1,15 @@
 <template>
-  <div id="app">
+  <div id="app" class="container-fluid">
     {{ message }}
 
-    <router-link to="/"><button>직원목록 1</button></router-link>
-    <router-link to="/list2"><button>직원목록 2</button></router-link>
+    <div class="btn-group">
+      <router-link to="/">
+        <button class="btn btn-dark">직원목록 1</button>
+      </router-link>
+      <router-link to="/list2">
+        <button class="btn btn-dark">직원목록 2</button>
+      </router-link>
+    </div>
 
     <router-view></router-view>
   </div>
@@ -20,4 +26,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped></style>
