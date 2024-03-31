@@ -1,22 +1,34 @@
 <template>
   <div>
-    {{ message }}
-    <button @click="btnNew">신규</button>
-    <button @click="btnSave">저장</button>
-    <button @click="btnDelete">삭제</button>
+    <button class="btn btn-dark" @click="addRow">신규</button>
+    <button class="btn btn-dark" @click="btnSave">저장</button>
+    <button class="btn btn-dark" @click="btnDelete">삭제</button>
   </div>
 </template>
 
 <script>
 export default {
   data() {
-    return {
-      message: "여기는 components 폴더 아래에 있는 button.vue 파일 입니다.",
-    };
+    return {};
   },
   methods: {
-    btnNew() {
-      alert("신규버튼 클릭");
+    addRow() {
+      alert("새로운 직원을 추가합니다.");
+      this.employees.push({
+        employee_no: "",
+        employee_nm: "",
+        hp_no: "",
+        email: "",
+        entr_dt: "",
+        retr_dt: "",
+        wrk_typ_cd: "",
+        pstn_nm: "",
+        rank_nm: "",
+        reg_id: "",
+        reg_dtm: "",
+        mod_id: "",
+        mod_dtm: "",
+      });
     },
     btnSave() {
       alert("저장버튼 클릭");
