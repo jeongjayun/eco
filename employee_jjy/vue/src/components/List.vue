@@ -1,4 +1,6 @@
 <template>
+  <div>{{ message }}</div>
+
   <table class="table table-striped table-hover table-bordered">
     <thead style="text-align: center">
       <th>직원번호</th>
@@ -39,6 +41,7 @@
 export default {
   data() {
     return {
+      message: "List.vue (emit)",
       employees: [],
     };
   },
@@ -47,7 +50,7 @@ export default {
       .post("/api/list")
       .then((response) => (this.employees = response.data))
       .catch((error) => {
-        alert("error", error);
+        alert("목록을 가져오지 못했습니다.");
         console.log(error);
       });
   },

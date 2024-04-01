@@ -18,7 +18,7 @@ export default {
   data() {
     return {
       message: "화면이 바뀌었습니다.",
-      message2: "여기는 Views 폴더 아래에 있는 EmployeeList2.vue 파일입니다.",
+      message2: "List.vue와 Buttons.vue의 부모 컴포넌트 (props)",
     };
   },
 };

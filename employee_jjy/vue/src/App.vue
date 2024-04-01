@@ -11,7 +11,7 @@
       </router-link>
     </div>
 
-    <router-view></router-view>
+    <router-view />
   </div>
 </template>
 
@@ -20,7 +20,7 @@ export default {
   data() {
     return {
       message:
-        "여기는 App.vue 페이지 입니다. 아래는 router-view로 URL 마다 변하는 화면입니다.",
+        "여기는 App.vue 페이지 입니다. 아래는 router-view로 변하는 화면입니다.",
     };
   },
 };

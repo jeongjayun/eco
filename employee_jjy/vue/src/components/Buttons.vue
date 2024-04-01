@@ -1,5 +1,6 @@
 <template>
   <div>
+    {{ message }}
     <button class="btn btn-dark" @click="addRow">신규</button>
     <button class="btn btn-dark" @click="btnSave">저장</button>
     <button class="btn btn-dark" @click="btnDelete">삭제</button>
@@ -9,7 +10,7 @@
 <script>
 export default {
   data() {
-    return {};
+    return { message: "buttons.vue (emit)" };
   },
   methods: {
     addRow() {

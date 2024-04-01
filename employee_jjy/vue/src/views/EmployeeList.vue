@@ -16,7 +16,7 @@ export default {
   },
   data() {
     return {
-      message: "여기는 Views 폴더 아래에 있는 EmployeeList.vue 파일입니다.",
+      message: "List.vue와 Buttons.vue의 부모 컴포넌트 (props)",
     };
   },
 };

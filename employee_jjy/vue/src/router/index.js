@@ -11,6 +11,11 @@ const routes = [
     name: "EmployeeList2", // [이름]
     component: () => import("../views/EmployeeList2.vue"), // [로드 파일]
   },
+  {
+    path: "/parents",
+    name: "Parents",
+    component: () => import("../views/Parents.vue"),
+  },
 ];
 
 // 라우터 생성
