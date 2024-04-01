@@ -6,8 +6,8 @@ server:
 spring:
   datasource:
     driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-#    url: jdbc:log4jdbc:oracle:thin:@192.168.0.101:1521/xe
-    url: jdbc:log4jdbc:oracle:thin:@localhost:1521:xe
+    url: jdbc:log4jdbc:oracle:thin:@192.168.0.101:1521/xe
+#    url: jdbc:log4jdbc:oracle:thin:@localhost:1521:xe
     username: eco_fresh
     password: eco1505!
 
